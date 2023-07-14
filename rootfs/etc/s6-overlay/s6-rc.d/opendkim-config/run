@@ -1,0 +1,19 @@
+#!/usr/bin/with-contenv bashio
+
+set -e
+
+bashio::config.require 'domain' 'Domain used for dkim key'
+
+DOMAIN=$(bashio::config 'domain')
+SELECTOR=$(bashio::config 'selector' 'default')
+
+bashio::log.info "Preparing opendkim config files"
+
+sed -i "s/%%DOMAIN%%/$DOMAIN/g" /etc/opendkim/opendkim.conf
+sed -i "s/%%SELECTOR%%/$SELECTOR/g" /etc/opendkim/opendkim.conf
+
+bashio::log.info "Preparing opendkim fs"
+
+mkdir -p /var/spool/postfix/opendkim
+chown opendkim:opendkim /var/spool/postfix/opendkim
+addgroup postfix opendkim

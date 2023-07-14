@@ -1,0 +1,23 @@
+---
+name: Postfix
+version: dev
+slug: postfix
+description:
+init: false
+startup: system
+arch:
+  - aarch64
+  - amd64
+  - armv7
+ports:
+  25/tcp: 25
+ports_description:
+  25/tcp: SMTP port
+options:
+  dkim: true
+schema:
+  log_level: list(trace|debug|info|notice|warning|error|fatal)?
+  dkim: bool
+  domain: str
+services:
+  - mail:provide

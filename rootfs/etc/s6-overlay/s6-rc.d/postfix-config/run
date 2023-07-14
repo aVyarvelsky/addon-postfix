@@ -1,0 +1,14 @@
+#!/usr/bin/with-contenv bashio
+
+set -e
+
+bashio::config.require 'domain' 'Domain used for hello in postfix'
+bashio::config.require 'hostname' 'Hostname used for hello in postfix'
+
+DOMAIN=$(bashio::config 'domain')
+HOSTNAME=$(bashio::config 'hostname')
+
+bashio::log.info "Preparing postfix config files"
+
+sed -i "s/%%DOMAIN%%/$DOMAIN/g" /etc/postfix/main.cf
+sed -i "s/%%HOSTNAME%%/$HOSTNAME/g" /etc/postfix/main.cf

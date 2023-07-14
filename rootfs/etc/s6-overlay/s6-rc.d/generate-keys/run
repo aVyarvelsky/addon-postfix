@@ -1,0 +1,16 @@
+#!/usr/bin/with-contenv bashio
+
+OPENDKIM_PRIVATE_KEY=/data/default.private
+OPENDKIM_PUBLIC_KEY=/data/default.txt
+
+if bashio::fs.file_exists "${OPENDKIM_PRIVATE_KEY}"; then
+    bashio::log.info "Using existing private key"
+else
+    bashio::log.info "Generating new private key"
+    opendkim-genkey --directory=/data --selector=default
+fi
+
+bashio::log.info "Public key for signing:"
+bashio::log.info `cat ${OPENDKIM_PUBLIC_KEY}`
+
+chown opendkim:opendkim /data/default.private
